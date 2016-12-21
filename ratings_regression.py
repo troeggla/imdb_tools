@@ -37,8 +37,8 @@ def main():
     for season in seasons:
         X, Y, model = get_model_for_season(ratings, season)
 
-        plt.scatter(X, Y, color="black")
-        plt.plot(X, model.predict(X))
+        lines = plt.plot(X, model.predict(X))
+        plt.scatter(X, Y, color=lines[0]._color)
 
     plt.xlim(-0.5, len(ratings))
     plt.show()
