@@ -3,8 +3,13 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from get_series_rating import get_series_ratings
+from itertools import chain
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
+
+
+def flatten(l):
+    return list(chain(*l))
 
 
 def get_model_for_season(data, season_nr):
