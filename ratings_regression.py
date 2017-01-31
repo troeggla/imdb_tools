@@ -39,6 +39,7 @@ def main():
     ratings = list(get_series_ratings(sys.argv[1]))
     ratings = [e for e in ratings if "." in e[0]]
     seasons = set([int(e[0].split(".")[0]) for e in ratings])
+    y_lower_lim = 10
 
     for season in seasons:
         X, Y, model = get_model_for_season(ratings, season)
@@ -47,9 +48,12 @@ def main():
         lines = plt.plot(X, y_pred)
         plt.scatter(X, Y, color=lines[0]._color)
 
+        y_lower_lim = min(flatten(Y) + [y_lower_lim])
+
         print season, "=>", r2_score(Y, y_pred)
 
     plt.xlim(-0.5, len(ratings))
+    plt.ylim(y_lower_lim - 0.5, 10.5)
     plt.show()
 
 
