@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from get_series_rating import get_series_ratings
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 
 
 def get_model_for_season(data, season_nr):
@@ -36,9 +37,12 @@ def main():
 
     for season in seasons:
         X, Y, model = get_model_for_season(ratings, season)
+        y_pred = model.predict(X)
 
-        lines = plt.plot(X, model.predict(X))
+        lines = plt.plot(X, y_pred)
         plt.scatter(X, Y, color=lines[0]._color)
+
+        print season, "=>", r2_score(Y, y_pred)
 
     plt.xlim(-0.5, len(ratings))
     plt.show()
