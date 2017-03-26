@@ -45,6 +45,8 @@ def main():
         X, Y, model = get_model_for_season(ratings, season)
         y_pred = model.predict(X)
 
+        X = [n + 1 for n in X]
+
         lines = plt.plot(X, y_pred)
         plt.scatter(X, Y, color=lines[0]._color)
 
@@ -52,7 +54,7 @@ def main():
 
         print season, "=>", r2_score(Y, y_pred)
 
-    plt.xlim(-0.5, len(ratings))
+    plt.xlim(0.5, len(ratings) + 0.5)
     plt.ylim(y_lower_lim - 0.5, 10.5)
     plt.show()
 
