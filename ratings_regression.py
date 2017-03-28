@@ -37,8 +37,7 @@ def main():
         sys.exit(1)
 
     ratings = list(get_series_ratings(sys.argv[1]))
-    ratings = [e for e in ratings if "." in e[0]]
-    seasons = set([int(e[0].split(".")[0]) for e in ratings])
+    seasons = set([int(e[0].split(".")[0]) for e in ratings if "." in e[0]])
     y_lower_lim = 10
 
     for season in seasons:
