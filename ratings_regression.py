@@ -12,11 +12,11 @@ def flatten(l):
     return list(chain(*l))
 
 
-def get_model_for_series(data):
+def get_model(data):
     model = LinearRegression()
     X, Y = [], []
 
-    for i, episode in enumerate(data):
+    for i, episode in data:
         X.append(i)
         Y.append(episode[2])
 
@@ -29,22 +29,12 @@ def get_model_for_series(data):
 
 
 def get_model_for_season(data, season_nr):
-    model = LinearRegression()
-    X, Y = [], []
-
-    for i, episode in enumerate(data):
+    def filter_season((_, episode)):
         episode_season = int(episode[0].split(".")[0])
+        return episode_season == season_nr
 
-        if episode_season == season_nr:
-            X.append(i)
-            Y.append(episode[2])
-
-    X = np.reshape(X, (-1, 1))
-    Y = np.reshape(Y, (-1, 1))
-
-    model.fit(X, Y)
-
-    return X, Y, model
+    season_data = filter(filter_season, enumerate(data))
+    return get_model(season_data)
 
 
 def main():
@@ -69,7 +59,7 @@ def main():
 
         print season, "=>", r2_score(Y, y_pred)
 
-    X, _, model = get_model_for_series(ratings)
+    X, _, model = get_model(enumerate(ratings))
     y_pred = model.predict(X)
 
     plt.plot(
