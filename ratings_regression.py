@@ -12,6 +12,22 @@ def flatten(l):
     return list(chain(*l))
 
 
+def get_model_for_series(data):
+    model = LinearRegression()
+    X, Y = [], []
+
+    for i, episode in enumerate(data):
+        X.append(i)
+        Y.append(episode[2])
+
+    X = np.reshape(X, (-1, 1))
+    Y = np.reshape(Y, (-1, 1))
+
+    model.fit(X, Y)
+
+    return X, Y, model
+
+
 def get_model_for_season(data, season_nr):
     model = LinearRegression()
     X, Y = [], []
@@ -52,6 +68,16 @@ def main():
         y_lower_lim = min(flatten(Y) + [y_lower_lim])
 
         print season, "=>", r2_score(Y, y_pred)
+
+    X, _, model = get_model_for_series(ratings)
+    y_pred = model.predict(X)
+
+    plt.plot(
+        [n + 1 for n in X], y_pred,
+        color="gray",
+        linestyle="dashed",
+        linewidth=0.5
+    )
 
     plt.xlim(0.5, len(ratings) + 0.5)
     plt.ylim(y_lower_lim - 0.5, 10.5)
