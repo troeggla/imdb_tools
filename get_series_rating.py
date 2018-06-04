@@ -11,20 +11,23 @@ def parse_episodes(doc):
     )
 
     for episode in eplist:
+        date_str = episode.find(class_="airdate").text.strip()
+
         try:
             airdate = datetime.strptime(
-                episode.find(class_="airdate").text.strip(),
-                "%d %b. %Y"
+                date_str,
+                "%d %b. %Y" if "May" not in date_str else "%d %b %Y"
             )
 
-            title = episode.strong.text
-            epnum = episode.find("meta", itemprop="episodeNumber")["content"]
+            if datetime.now() > airdate:
+                title = episode.strong.text
+                num = episode.find("meta", itemprop="episodeNumber")["content"]
 
-            ratings = episode.find(class_="ipl-rating-star").find_all("span")
-            rating = float(ratings[1].text)
-            num_votes = int(re.sub(r"[^0-9]", "", ratings[2].text))
+                info = episode.find(class_="ipl-rating-star").find_all("span")
+                rating = float(info[1].text)
+                num_votes = int(re.sub(r"[^0-9]", "", info[2].text))
 
-            yield epnum, title, rating, num_votes
+                yield num, title, rating, num_votes
         except ValueError:
             pass
 
