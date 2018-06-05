@@ -27,7 +27,7 @@ def get_model(data):
 
     for i, episode in data:
         X.append(i)
-        Y.append(episode[2])
+        Y.append(episode[3])
 
     X = np.reshape(X, (-1, 1))
     Y = np.reshape(Y, (-1, 1))
@@ -80,6 +80,12 @@ def main():
 
     plt.xlim(0.5, len(ratings) + 0.5)
     plt.ylim(y_lower_lim - 0.5, 10.5)
+
+    plt.title(ratings[0][1])
+    plt.xlabel("Episode")
+    plt.ylabel("Rating")
+
+    plt.tight_layout()
     plt.show()
 
 
