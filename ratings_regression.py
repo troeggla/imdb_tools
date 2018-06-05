@@ -68,15 +68,16 @@ def main():
 
         print season, "=>", r2_score(Y, y_pred)
 
-    X, _, model = get_model(ratings)
-    y_pred = model.predict(X)
+    if len(seasons) > 1:
+        X, _, model = get_model(ratings)
+        y_pred = model.predict(X)
 
-    plt.plot(
-        [n + 1 for n in X], y_pred,
-        color="gray",
-        linestyle="dashed",
-        linewidth=0.5
-    )
+        plt.plot(
+            [n + 1 for n in X], y_pred,
+            color="gray",
+            linestyle="dashed",
+            linewidth=0.5
+        )
 
     plt.xlim(0.5, len(ratings) + 0.5)
     plt.ylim(y_lower_lim - 0.5, 10.5)
