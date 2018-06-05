@@ -22,6 +22,9 @@ def get_model(data):
     model = LinearRegression()
     X, Y = [], []
 
+    if not (isinstance(data[0][0], int) or isinstance(data[0][1], tuple)):
+        data = enumerate(data)
+
     for i, episode in data:
         X.append(i)
         Y.append(episode[2])
@@ -65,7 +68,7 @@ def main():
 
         print season, "=>", r2_score(Y, y_pred)
 
-    X, _, model = get_model(enumerate(ratings))
+    X, _, model = get_model(ratings)
     y_pred = model.predict(X)
 
     plt.plot(
