@@ -42,11 +42,13 @@ def get_series_ratings(imdb_id):
     seasons = doc.find("select", id="bySeason").find_all("option")
 
     preselected_episodes = parse_episodes(doc)
+    series_title = doc.find("h3", itemprop="name").a.text
 
     for season in seasons:
         if season.has_attr("selected"):
             for episode in preselected_episodes:
-                yield (season["value"] + "." + episode[0],) + episode[1:]
+                episode_num = season["value"] + "." + episode[0]
+                yield (episode_num, series_title) + episode[1:]
         else:
             season_url = url + "?season=" + season["value"]
             data = requests.get(season_url, headers={
@@ -55,7 +57,8 @@ def get_series_ratings(imdb_id):
 
             doc = BeautifulSoup(data.text, "html.parser")
             for episode in parse_episodes(doc):
-                yield (season["value"] + "." + episode[0],) + episode[1:]
+                episode_num = season["value"] + "." + episode[0]
+                yield (episode_num, series_title) + episode[1:]
 
 
 def main():
@@ -65,9 +68,9 @@ def main():
 
     ratings = get_series_ratings(sys.argv[1])
 
-    print "episode_num,name,rating,rating_count"
+    print "episode_num,name,title,rating,rating_count"
     for episode_info in ratings:
-        print "\"%s\",\"%s\",%.1f,%d" % episode_info
+        print "\"%s\",\"%s\",\"%s\",%.1f,%d" % episode_info
 
 
 if __name__ == "__main__":
