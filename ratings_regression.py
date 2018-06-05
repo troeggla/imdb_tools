@@ -9,7 +9,13 @@ from sklearn.metrics import r2_score
 
 
 def flatten(l):
-    return list(chain(*l))
+    def f(acc, x):
+        if isinstance(x, list):
+            return acc + flatten(x)
+        else:
+            return acc + [x]
+
+    return reduce(f, l, [])
 
 
 def get_model(data):
