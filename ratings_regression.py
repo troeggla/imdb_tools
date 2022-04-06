@@ -3,7 +3,6 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from get_series_rating import get_series_ratings
-from itertools import chain
 from functools import reduce
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
