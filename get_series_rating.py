@@ -22,10 +22,17 @@ def parse_episodes(doc):
             if datetime.now() > airdate:
                 title = episode.strong.text
                 num = episode.find("meta", itemprop="episodeNumber")["content"]
-
                 info = episode.find(class_="ipl-rating-star").find_all("span")
-                rating = float(info[1].text)
-                num_votes = int(re.sub(r"[^0-9]", "", info[2].text))
+
+                if len(info) >= 2:
+                    rating = float(info[1].text)
+                else:
+                    rating = 0.0
+
+                if len(info) >= 3:
+                    num_votes = int(re.sub(r"[^0-9]", "", info[2].text))
+                else:
+                    num_votes = 0
 
                 yield num, title, rating, num_votes
         except ValueError:
@@ -63,14 +70,14 @@ def get_series_ratings(imdb_id):
 
 def main():
     if len(sys.argv) != 2:
-        print "USAGE:", sys.argv[0], "[imdb_id]"
+        print("USAGE:", sys.argv[0], "[imdb_id]")
         sys.exit(1)
 
     ratings = get_series_ratings(sys.argv[1])
 
-    print "episode_num,name,title,rating,rating_count"
+    print("episode_num,name,title,rating,rating_count")
     for episode_info in ratings:
-        print "\"%s\",\"%s\",\"%s\",%.1f,%d" % episode_info
+        print("\"%s\",\"%s\",\"%s\",%.1f,%d" % episode_info)
 
 
 if __name__ == "__main__":

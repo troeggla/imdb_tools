@@ -3,3 +3,4 @@ syntax: glob
 *.swp
 *.pyc
 .DS_Store
+.mypy_cache/*

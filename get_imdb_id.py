@@ -23,13 +23,13 @@ def search_for_title(title, limit=10):
 
 def main():
     if len(sys.argv) != 2:
-        print "USAGE:", sys.argv[0], "[search_term]"
+        print("USAGE:", sys.argv[0], "[search_term]")
         sys.exit(1)
 
     results = search_for_title(sys.argv[1])
 
     for imdb_id, title in results:
-        print imdb_id, "=>", title
+        print(imdb_id, "=>", title)
 
 
 if __name__ == "__main__":
