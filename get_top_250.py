@@ -1,9 +1,6 @@
-import codecs
 import sys
 import requests
 from bs4 import BeautifulSoup
-
-sys.stdout = codecs.getwriter("utf8")(sys.stdout)
 
 
 def get_top_250():
@@ -28,9 +25,10 @@ def get_top_250():
 def main():
     top250 = get_top_250()
 
-    print "position,title,year,rating"
+    print("position,title,year,rating")
+
     for position, title, year, rating in top250:
-        print u'%d,"%s",%d,%.1f' % (position, title, year, rating)
+        print(u'%d,"%s",%d,%.1f' % (position, title, year, rating))
 
 
 if __name__ == "__main__":
