@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from threading import Thread
 
 
 def parse_episodes(doc):
@@ -67,28 +68,68 @@ def get_series_ratings(imdb_id):
     # Extract series title from initial page
     series_title = doc.find("h3", itemprop="name").a.text
 
-    # Iterator over remaining seasons
+    # Shared data structure for storing retrieved data grouped by season
+    season_data = {}
+
+    def fetch_season_and_parse(season_number):
+        """Fetches and parses the data associated to the given season."""
+        # Fetch season page
+        season_url = url + "?season=" + season_number
+        data = requests.get(season_url, headers={
+            "Accept-Language": "en"
+        })
+
+        # Initialise entry in shared data structure
+        season_data[season_number] = []
+
+        # Parse season page
+        doc = BeautifulSoup(data.text, "html.parser")
+        # Parse episodes for season
+        for episode in parse_episodes(doc):
+            episode_num = season_number + "." + episode[0]
+
+            # Add parsed data to data strcture
+            season_data[season_number].append(
+                (episode_num, series_title) + episode[1:]
+            )
+
+    # List of threads
+    threads = []
+
+    # Iterate over remaining seasons
     for season in seasons:
-        # Yield seasons extracted from initial page
+        # Process season extracted from initial page
         if season.has_attr("selected"):
+            season_data[season["value"]] = []
+
             for episode in preselected_episodes:
                 # Prefix episode number with season number and yield
                 episode_num = season["value"] + "." + episode[0]
-                yield (episode_num, series_title) + episode[1:]
-        else:
-            # Fetch subsequent season page
-            season_url = url + "?season=" + season["value"]
-            data = requests.get(season_url, headers={
-                "Accept-Language": "en"
-            })
 
-            # Parse season page
-            doc = BeautifulSoup(data.text, "html.parser")
-            # Parse episodes for season
-            for episode in parse_episodes(doc):
-                # Prefix episode number with season number and yield
-                episode_num = season["value"] + "." + episode[0]
-                yield (episode_num, series_title) + episode[1:]
+                # Add data to data strcture
+                season_data[season["value"]].append(
+                    (episode_num, series_title) + episode[1:]
+                )
+        else:
+            # Spawn new thread for fetching data for the given season
+            thread = Thread(
+                target=fetch_season_and_parse,
+                args=(season["value"], )
+            )
+
+            # Append thread to list of threads and start it
+            threads.append(thread)
+            thread.start()
+
+    # Wait for threads to complete
+    for thread in threads:
+        thread.join()
+
+    # Sort retrieved data by season number
+    for key in sorted(season_data):
+        # Yield data for each episode separately
+        for episode in season_data[key]:
+            yield episode
 
 
 def main():
