@@ -10,20 +10,27 @@ A suite of Python scripts for retrieving data from the IMDB homepage.
 - `get_top_250.py` contains a function for retrieving a list of titles on the
   IMDB Top 250
 - `ratings_regression.py` contains functions for plotting all ratings for a
-  series identified by an IMDB ID together for a linear regression analysis for
-  each season
+  series identified by an IMDB ID together with a linear regression analysis
+  for each season
 - `get_series_rating.py` contains functions for retrieving all episodes
-  including ratings and vote counts for a series identified by a given IMDB ID
+  accompanied by ratings and vote counts of a series identified by a given
+  IMDB ID
 
-The script `show_ratings.sh` acts as a convenience script to perform a search
-query and perform a regression analysis on the first result, like so:
+The script `show_ratings.sh` acts as a convenience script to carry out a search
+query and perform a regression analysis on the first result. The script can be
+called like so:
 
     bash show_ratings.sh "true detective"
 
 This will open an interactive plot window showing ratings for all three seasons
 of the series *True Detective*, with a regression line for each season as well
 as the series overall. Instead of passing a search string, the script also
-accepts an IMDB ID directly.
+directly accepts an IMDB ID as parameter:
+
+    bash show_ratings.sh tt0944947
+
+Calling the script this way will be faster, since a search for the IMDB ID does
+not need to be perfomed before fetching episode information.
 
 To ensure all necessary dependencies are installed correctly, run the following
 `pip` command:
