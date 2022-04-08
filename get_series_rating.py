@@ -7,7 +7,8 @@ from threading import Thread
 
 
 def parse_episodes(doc):
-    """Parse episodes from the season page of a series on IMDB"""
+    """Parse episodes from the season page of a series on IMDB."""
+
     # Find all TVEpisode items within the document
     eplist = doc.find("div", class_="eplist").find_all(
         itemtype="http://schema.org/TVEpisode"
@@ -52,7 +53,8 @@ def parse_episodes(doc):
 
 
 def get_series_ratings(imdb_id):
-    """Returns ratings for all episodes of the series with the given IMDB ID."""
+    """Returns ratings for all episodes of the series with given IMDB ID."""
+
     # Fetch list of episodes for given IMDB ID
     url = "http://www.imdb.com/title/" + imdb_id + "/episodes"
     data = requests.get(url, headers={
@@ -133,6 +135,8 @@ def get_series_ratings(imdb_id):
 
 
 def main():
+    """Called if script is called from the command line."""
+
     # Make sure an IMDB ID is passed through the command line
     if len(sys.argv) != 2:
         print("USAGE:", sys.argv[0], "[imdb_id]")

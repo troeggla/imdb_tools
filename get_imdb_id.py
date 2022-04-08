@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 def search_for_title(title, limit=10):
     """Yields tuples of IMDB IDs and titles corresponding to a search query."""
+
     # Replace spaces in query with plus symbols and lowercase the query
     query = "+".join(word.lower() for word in title.split(" "))
     # Build query url
@@ -31,6 +32,8 @@ def search_for_title(title, limit=10):
 
 
 def main():
+    """Called if script is called from the command line."""
+
     # Ensure a search term is passed through the command line
     if len(sys.argv) != 2:
         print("USAGE:", sys.argv[0], "[search_term]")

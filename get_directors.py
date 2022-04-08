@@ -18,7 +18,8 @@ def get_director(imdb_id):
 
 
 def get_directors_list():
-    """Returns the list of directors for all films on IMDB's Top 250 as a generator."""
+    """Returns the list of directors for all films on IMDB's Top 250."""
+
     # Fetch IMDB Top 250 page
     data = requests.get("http://www.imdb.com/chart/top", headers={
         "Accept-Language": "en"

@@ -10,7 +10,10 @@ from sklearn.metrics import r2_score
 
 def flatten(lst):
     """Flattens an arbitrarly nested list into a flat list."""
+
     def f(acc, x):
+        """Checks if `x` is a list and if so, flattens it."""
+
         # If param is a list, call flatten recursively, otherwise append item
         if isinstance(x, list):
             return acc + flatten(x)
@@ -23,6 +26,7 @@ def flatten(lst):
 
 def get_model(data):
     """Generates a linear regression model given a set of episode ratings."""
+
     model = LinearRegression()
     X, Y = [], []
 
@@ -47,9 +51,11 @@ def get_model(data):
 
 
 def get_model_for_season(data, season_nr):
-    """Returns a linear regression model for a given season in a series dataset."""
+    """Returns a linear regression model for a given season in a dataset."""
+
     def filter_season(season):
-        """Filtera the series by the given season"""
+        """Filters the series by the given season."""
+
         _, episode = season
 
         # Extract season number
@@ -62,7 +68,8 @@ def get_model_for_season(data, season_nr):
 
 
 def parse_season_string(season_filter):
-    """Parses a string into a list of seasons passed in from the command line."""
+    """Parses a string into a list of seasons."""
+
     filtered_seasons = []
 
     # Split string according to commas
@@ -81,6 +88,8 @@ def parse_season_string(season_filter):
 
 
 def main():
+    """Called if script is called from the command line."""
+
     # Make sure an IMDB ID and optionally a list of seaons is passed in
     if len(sys.argv) < 2:
         print("USAGE:", sys.argv[0], "imdb_id [seasons]")
@@ -110,7 +119,7 @@ def main():
 
         # Plot regression line
         lines = plt.plot(X, y_pred)
-        # Print scatter plot for episode ratings using same colour as regression
+        # Print scatter plot for ratings using same colour as regression
         plt.scatter(X, Y, color=lines[0]._color)
 
         # Ensure Y axis minimum is lowered if it is lower than `y_lower_lim`

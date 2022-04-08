@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 
 
 def get_top_250():
-    """Retrieves all entries on the IMDB Top 250 with position, title, year and rating."""
+    """Retrieves data for all entries on the IMDB Top 250."""
+
     # Fetch IMDB Top 250
     data = requests.get("http://www.imdb.com/chart/top", headers={
         "Accept-Language": "en"
@@ -28,8 +29,9 @@ def get_top_250():
 
 
 def main():
-    top250 = get_top_250()
+    """Called if script is called from the command line."""
 
+    top250 = get_top_250()
     print("position,title,year,rating")
 
     # Print IMDB Top 250 as CSV
