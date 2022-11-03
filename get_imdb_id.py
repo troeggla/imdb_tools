@@ -18,14 +18,16 @@ def search_for_title(title, limit=10):
 
     # Parse page and extract results
     doc = BeautifulSoup(data.text, "html.parser")
-    results = doc.find(class_="findList").find_all("tr", class_="findResult")
+    results = doc.find_all("li", class_="find-result-item")
 
     # Iterate over results, yielding at most `limit` items
     for row in results[:limit]:
-        # Find title
-        title = row("td")[1].text.strip()
+        title_link = row.find("a")
+
+        # Get title
+        title = title_link.text
         # Find corresponding IMDB ID
-        imdb_id = row("td")[1].find("a")['href'].split("/")[2]
+        imdb_id = title_link['href'].split("/")[2]
 
         # Yield results
         yield imdb_id, title
